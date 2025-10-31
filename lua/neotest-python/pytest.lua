@@ -66,11 +66,16 @@ local function discover_params(python, script, path, positions, root)
     return {}
   end
 
+  logger.debug("Got ", data.stdout:len(), " bytes of output")
+
   for line in vim.gsplit(data.stdout, "\n", { plain = true }) do
     local param_index = string.find(line, "[", nil, true)
     if param_index then
-      local test_id = root .. lib.files.path.sep .. string.sub(line, 1, param_index - 1)
+      local sep = require("plenary.path").path.sep
+      local test_id = root .. sep .. string.sub(line, 1, param_index - 1):gsub("[\\/]", sep)
       local param_id = string.sub(line, param_index + 1, #line - 1)
+
+      logger.debug("Looking for ", test_id, " - ", param_id)
 
       if positions:get_key(test_id) then
         if not test_params[test_id] then
