@@ -73,7 +73,7 @@ local function discover_params(python, script, path, positions, root)
     if param_index then
       local sep = require("plenary.path").path.sep
       local test_id = root .. sep .. string.sub(line, 1, param_index - 1):gsub("[\\/]", sep)
-      local param_id = string.sub(line, param_index + 1, #line - 1)
+      local param_id = string.sub(line, param_index + 1, #line - 1):gsub("\\]", "")
 
       logger.debug("Looking for ", test_id, " - ", param_id)
 
